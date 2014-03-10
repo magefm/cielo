@@ -1,4 +1,4 @@
-cielo
+Cielo
 =====
 
 Cielo payment module for Magento
