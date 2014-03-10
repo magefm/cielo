@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <MageFM_Cielo>
+            <active>true</active>
+            <codePool>community</codePool>
+        </MageFM_Cielo>
+    </modules>
+</config>

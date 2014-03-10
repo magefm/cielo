@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <MageFM_Cielo>
+            <version>1.0.0</version>
+        </MageFM_Cielo>
+    </modules>
+    <global>
+        <models>
+            <magefm_cielo>
+                <class>MageFM_Cielo_Model</class>
+            </magefm_cielo>
+        </models>
+        <helpers>
+            <magefm_cielo>
+                <class>MageFM_Cielo_Helper</class>
+            </magefm_cielo>
+        </helpers>
+    </global>
+    <default>
+        <payment>
+            <magefm_cielo>
+                <payment_action>authorize</payment_action>
+                <model>MageFM_Cielo_Model_Method</model>
+                <title><![CDATA[Cartão de crédito]]></title>
+            </magefm_cielo>
+        </payment>
+    </default>
+</config>
