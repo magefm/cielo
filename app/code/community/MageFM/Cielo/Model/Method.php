@@ -30,4 +30,5 @@ class MageFM_Cielo_Model_Method extends Mage_Payment_Model_Method_Cc
     {
         die(__METHOD__);
     }
+
 }
