@@ -81,12 +81,35 @@ class MageFM_Cielo_Model_Method extends Mage_Payment_Model_Method_Cc
 
     public function void(Varien_Object $payment)
     {
-        Mage::throwException(__METHOD__);
+        $authorizationTransaction = $payment->getAuthorizationTransaction();
+        $amount = (float) $payment->getAmountAuthorized();
+        $tid = $authorizationTransaction->getTxnId();
+
+        try {
+            $response = $this->getApiModel()->void($tid);
+
+            $payment->setAmountCanceled($amount);
+
+            $transaction = Mage::getModel('sales/order_payment_transaction');
+            $transaction->setOrderPaymentObject($payment);
+            $transaction->setTxnId($payment->getTransactionId());
+            $transaction->setTxnType(Mage_Sales_Model_Order_Payment_Transaction::TYPE_VOID);
+            $transaction->setAdditionalInformation('response', json_encode($response));
+            $transaction->setIsClosed(true);
+            $transaction->setParentId($authorizationTransaction->getId());
+            $transaction->setParentTxnId($authorizationTransaction->getTxnId());
+            $transaction->save();
+        } catch (Exception $e) {
+            Mage::throwException($e->getMessage());
+        }
+
+        return $this;
     }
 
     public function cancel(Varien_Object $payment)
     {
-        Mage::throwException(__METHOD__);
+        $this->void($payment);
+        return $this;
     }
 
     public function validate()

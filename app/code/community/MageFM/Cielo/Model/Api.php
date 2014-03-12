@@ -60,6 +60,29 @@ class MageFM_Cielo_Model_Api
         throw new Exception('Capture failed.');
     }
 
+    public function void($tid)
+    {
+        $requestXML = $this->createVoidXML($tid);
+        $responseXML = $this->sendXML($requestXML);
+
+        $response = simplexml_load_string($responseXML);
+
+        Mage::log("Void | Request: {$requestXML}\r\nResponse: {$responseXML}", null, 'magefm-cielo.log', true);
+
+        if (empty($response->cancelamentos)) {
+            throw new Exception('Void failed.');
+        }
+
+
+        foreach ($response->cancelamentos as $cancelamento) {
+            if (!empty($cancelamento->cancelamento->codigo) && (string) $cancelamento->cancelamento->codigo === '9') {
+                return $response;
+            }
+        }
+
+        throw new Exception('Void failed.');
+    }
+
     protected function createAuthorizeXML($cc, $order)
     {
         $root = simplexml_load_string('<requisicao-transacao id="f094958b-3b68-4c0b-9e68-3137f24fb308" versao="1.3.0"/>');
@@ -106,6 +129,19 @@ class MageFM_Cielo_Model_Api
         $dadosEC->addChild('chave', $this->key);
 
         $root->addChild('valor', $amount);
+
+        return $root->asXML();
+    }
+
+    protected function createVoidXML($tid)
+    {
+        $root = simplexml_load_string('<requisicao-cancelamento id="adbc9961-8a39-452b-b7fd-15b44b464a97" versao="1.3.0"/>');
+
+        $root->addChild('tid', $tid);
+
+        $dadosEC = $root->addChild('dados-ec');
+        $dadosEC->addChild('numero', $this->affiliation);
+        $dadosEC->addChild('chave', $this->key);
 
         return $root->asXML();
     }
