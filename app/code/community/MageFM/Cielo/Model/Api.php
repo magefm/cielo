@@ -35,13 +35,29 @@ class MageFM_Cielo_Model_Api
 
         $response = simplexml_load_string($responseXML);
 
-        Mage::log("Request: {$requestXML}\r\nResponse: {$responseXML}", null, 'magefm-cielo.log', true);
+        Mage::log("Authorization | Request: {$requestXML}\r\nResponse: {$responseXML}", null, 'magefm-cielo.log', true);
 
         if (!empty($response->autorizacao->codigo) && (string) $response->autorizacao->codigo === '4') {
             return $response;
         }
 
         throw new Exception('Authorization failed.');
+    }
+
+    public function capture($tid, $amount)
+    {
+        $requestXML = $this->createCaptureXML($tid, $amount);
+        $responseXML = $this->sendXML($requestXML);
+
+        $response = simplexml_load_string($responseXML);
+
+        Mage::log("Capture | Request: {$requestXML}\r\nResponse: {$responseXML}", null, 'magefm-cielo.log', true);
+
+        if (!empty($response->captura->codigo) && (string) $response->captura->codigo === '6') {
+            return $response;
+        }
+
+        throw new Exception('Capture failed.');
     }
 
     protected function createAuthorizeXML($cc, $order)
@@ -75,6 +91,21 @@ class MageFM_Cielo_Model_Api
         $root->addChild('autorizar', '3');
         $root->addChild('capturar', 'false');
         $root->addChild('gerar-token', 'false');
+
+        return $root->asXML();
+    }
+
+    protected function createCaptureXML($tid, $amount)
+    {
+        $root = simplexml_load_string('<requisicao-captura id="adbc9961-8a39-452b-b7fd-15b44b464a97" versao="1.3.0"/>');
+
+        $root->addChild('tid', $tid);
+
+        $dadosEC = $root->addChild('dados-ec');
+        $dadosEC->addChild('numero', $this->affiliation);
+        $dadosEC->addChild('chave', $this->key);
+
+        $root->addChild('valor', $amount);
 
         return $root->asXML();
     }

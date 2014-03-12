@@ -51,7 +51,32 @@ class MageFM_Cielo_Model_Method extends Mage_Payment_Model_Method_Cc
 
     public function capture(Varien_Object $payment, $amount)
     {
-        Mage::throwException(__METHOD__);
+        $authorizationTransaction = $payment->getAuthorizationTransaction();
+
+        if (!$authorizationTransaction) {
+            $this->authorize($payment, $amount);
+            $authorizationTransaction = $payment->getAuthorizationTransaction();
+        }
+
+        $tid = $authorizationTransaction->getTxnId();
+
+        try {
+            $response = $this->getApiModel()->capture($tid, (string) ($amount * 100));
+
+            $transaction = Mage::getModel('sales/order_payment_transaction');
+            $transaction->setOrderPaymentObject($payment);
+            $transaction->setTxnId($authorizationTransaction->getTxnId() . '-capture');
+            $transaction->setTxnType(Mage_Sales_Model_Order_Payment_Transaction::TYPE_CAPTURE);
+            $transaction->setAdditionalInformation('response', json_encode($response));
+            $transaction->setIsClosed(true);
+            $transaction->setParentId($authorizationTransaction->getId());
+            $transaction->setParentTxnId($authorizationTransaction->getTxnId());
+            $transaction->save();
+        } catch (Exception $e) {
+            Mage::throwException($e->getMessage());
+        }
+
+        return $this;
     }
 
     public function void(Varien_Object $payment)
