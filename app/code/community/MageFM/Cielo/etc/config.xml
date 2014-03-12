@@ -6,16 +6,21 @@
         </MageFM_Cielo>
     </modules>
     <global>
-        <models>
+        <blocks>
             <magefm_cielo>
-                <class>MageFM_Cielo_Model</class>
+                <class>MageFM_Cielo_Block</class>
             </magefm_cielo>
-        </models>
+        </blocks>
         <helpers>
             <magefm_cielo>
                 <class>MageFM_Cielo_Helper</class>
             </magefm_cielo>
         </helpers>
+        <models>
+            <magefm_cielo>
+                <class>MageFM_Cielo_Model</class>
+            </magefm_cielo>
+        </models>
     </global>
     <default>
         <payment>
@@ -23,6 +28,9 @@
                 <payment_action>authorize</payment_action>
                 <model>MageFM_Cielo_Model_Method</model>
                 <title><![CDATA[Cartão de crédito]]></title>
+                <cctypes><![CDATA[visa,mastercard]]></cctypes>
+                <installments_number>3</installments_number>
+                <installments_amount>50.00</installments_amount>
             </magefm_cielo>
         </payment>
     </default>

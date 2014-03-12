@@ -27,6 +27,56 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </title>
+                        <cctypes translate="label">
+                            <label><![CDATA[Credit Card Types]]></label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>magefm_cielo/source_cctype</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cctypes>
+                        <affiliation translate="label">
+                            <label><![CDATA[Affiliation number]]></label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </affiliation>
+                        <key translate="label">
+                            <label><![CDATA[Webservice Key]]></label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </key>
+                        <softdescriptor translate="label comment">
+                            <label><![CDATA[Soft Descriptor]]></label>
+                            <comment><![CDATA[Limited to 13 characters.]]></comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </softdescriptor>
+                        <installments_number translate="label">
+                            <label><![CDATA[Number of installments allowed.]]></label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </installments_number>
+                        <installments_amount translate="label">
+                            <label><![CDATA[Installment amount allowed.]]></label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </installments_amount>
                     </fields>
                 </magefm_cielo>
             </groups>
